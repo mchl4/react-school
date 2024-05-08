@@ -2,11 +2,16 @@ import React from 'react'
 import { FaCalendar, FaDashcube, FaDatabase, FaTiktok } from 'react-icons/fa'
 import { FaGear, FaMessage, FaNoteSticky } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import Logo from '../svg/Logo'
 
 const Navigation = () => {
   return (
     <aside className='px-4 py-6 w-[250px] text-primary h-screen border-r border-line '>
-      <h2>School</h2>
+      <div className='flex items-center gap-3'>
+        <Logo />
+      <h2 className='mb-0 mt-4'>SCHOOL</h2>
+      </div>
+      
 
       <ul className=' nav'>
         <li className='nav-link active'><Link to="#"><FaDashcube/>Dashboard</Link></li>
