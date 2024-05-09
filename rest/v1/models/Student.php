@@ -12,6 +12,8 @@ Class Student{
     public $student_created;
     public $lastInsertedId;
 
+    public $student_search;
+
     public $connection;
     public $tblStudent;
 
@@ -25,28 +27,28 @@ Class Student{
             $sql = "insert into {$this->tblStudent} ";
             $sql .= "( student_name, ";
             $sql .= "student_class, ";
+            $sql .= "student_gender, ";
             $sql .= "student_age, ";
-            // $sql .= "student_gender, ";
             $sql .= "student_is_active, ";
-            // $sql .= "student_email, ";
+            $sql .= "student_email, ";
             $sql .= "student_created, ";
             $sql .= "student_datetime ) values ( ";
             $sql .= ":student_name, ";
             $sql .= ":student_class, ";
+            $sql .= ":student_gender, ";
             $sql .= ":student_age, ";
-            // $sql .= ":student_gender, ";
             $sql .= ":student_is_active, ";
-            // $sql .= ":student_email, ";
+            $sql .= ":student_email, ";
             $sql .= ":student_created, ";
             $sql .= ":student_datetime ) ";
             $query = $this->connection->prepare($sql);
             $query->execute([
                 "student_name" => $this->student_name,
                 "student_class" => $this->student_class,
+                "student_gender" => $this->student_gender,
                 "student_age" => $this->student_age,
-                // "student_gender" => $this->student_gender,
                 "student_is_active" => $this->student_is_active,
-                // "student_email" => $this->student_email,
+                "student_email" => $this->student_email,
                 "student_created" => $this->student_created,
                 "student_datetime" => $this->student_datetime,
             ]);
@@ -91,18 +93,18 @@ Class Student{
             $sql = "update {$this->tblStudent} set ";
             $sql .= "student_name = :student_name, ";
             $sql .= "student_class = :student_class, ";
+            $sql .= "student_gender = :student_gender, ";
             $sql .= "student_age = :student_age, ";
-            // $sql .= "student_gender = :student_gender, ";
-            // $sql .= "student_email = :student_email, ";
+            $sql .= "student_email = :student_email, ";
             $sql .= "student_datetime = :student_datetime ";
             $sql .= "where student_aid  = :student_aid ";
             $query = $this->connection->prepare($sql);
             $query->execute([
                 "student_name" => $this->student_name,
                 "student_class" => $this->student_class,
+                "student_gender" => $this->student_gender,
                 "student_age" => $this->student_age,
-                // "student_geder" => $this->student_gender,
-                // "student_email" => $this->student_email,
+                "student_email" => $this->student_email,
                 "student_datetime" => $this->student_datetime,
                 "student_aid" => $this->student_aid,
             ]);
@@ -124,6 +126,25 @@ Class Student{
                 "student_is_active" => $this->student_is_active,
                 "student_datetime" => $this->student_datetime,
                 "student_aid" => $this->student_aid,
+            ]);
+        } catch (PDOException $ex) {
+            $query = false;
+        }
+        return $query;
+    }
+
+    public function search()
+    {
+        try {
+            $sql = "select ";
+            $sql .= "* ";
+            $sql .= "from {$this->tblStudent} ";
+            $sql .= "where student_name like :student_name ";
+            $sql .= "order by student_is_active desc, ";
+            $sql .= "student_name asc ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                "student_name" => "%{$this->student_search}%",
             ]);
         } catch (PDOException $ex) {
             $query = false;

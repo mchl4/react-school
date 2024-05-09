@@ -164,7 +164,7 @@
     @apply scale-100
   }
  .tooltip::after{
-    @apply absolute content-[attr(data-tooltip)] text-xs p-0.5 px-1.5 text-content bg-primary bg-opacity-90 top-[calc(100%+10px)] left-1/2 -translate-x-1/2 scale-0 transition-transform rounded-sm
+    @apply absolute content-[attr(data-tooltip)] text-xs p-0.5 px-1.5 text-content z-10 bg-primary bg-opacity-90 top-[calc(100%+10px)] left-1/2 -translate-x-1/2 scale-0 transition-transform rounded-sm
   }
   .input-wrap{
     @apply mb-3 relative

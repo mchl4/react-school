@@ -7,33 +7,41 @@ import NoData from '../../../../partials/NoData'
 import SpinnerFetching from '../../../../partials/spinners/SpinnerFetching'
 import ModalConfirm from '../../../../partials/modals/ModalConfirm'
 import ModalDelete from '../../../../partials/modals/ModalDelete'
+import { StoreContext } from '../../../../../store/StoreContext'
+import { setIsActive, setIsAdd, setIsDelete, setIsShow } from '../../../../../store/StoreAction'
 
-const StudentTable = ({setShowInfo, showInfo,isLoading, student, setItemEdit, setIsAdd,setIsSuccess,setMessage}) => {
-    const [isActive, setIsActive] = React.useState(false);
+const StudentTable = ({isLoading, student, setItemEdit,setStudentInfo}) => {
+    const { store, dispatch } = React.useContext(StoreContext);
     const [isArchiving, setIsArchiving] = React.useState(0);
-    const [isDelete, setIsDelete] = React.useState(false);
-    const handleShowInfo = () => setShowInfo(!showInfo)
+   
+
+    const handleShowInfo = (item) => {
+        dispatch(setIsShow(true))
+        setStudentInfo(item)
+    };
+    let counter = 1;
+
     const [id, setId] = React.useState('')
 
     const handleEdit = (item) => {
-        setIsAdd(true)
+       dispatch(setIsAdd(true)) 
         setItemEdit(item)
     }
 
     const handleArchive = (item) =>{
-    setIsActive(true);
+    dispatch(setIsActive(true));
     setId(item.student_aid)
     setIsArchiving(0)
     }
 
     const handleRestore = (item) =>{
-        setIsActive(true);
+        dispatch(setIsActive(true));
         setId(item.student_aid)
         setIsArchiving(1)
         }
 
     const handleDelete = (item) =>{
-        setIsDelete(true);
+        dispatch (setIsDelete(true));
         setId(item.student_aid)
         
         }
@@ -41,7 +49,7 @@ const StudentTable = ({setShowInfo, showInfo,isLoading, student, setItemEdit, se
 <>
     <div className='table-wrapper relative'>
         {/* <SpinnerFetching/> */}
-    <table>
+    <table >
         <thead>
             <tr>
                 <th className='w-[20px]'>#</th>
@@ -71,7 +79,7 @@ const StudentTable = ({setShowInfo, showInfo,isLoading, student, setItemEdit, se
                 )}
              
                 {student?.data.map((item, key) => (
-                        <tr onDoubleClick={handleShowInfo} key={key}>
+                        <tr onDoubleClick={() => handleShowInfo (item)} key={key}>
                             <td>{item.student_aid}</td>
                             <td>{item.student_name}</td>
                             <td>{item.student_class}</td>
@@ -102,9 +110,9 @@ const StudentTable = ({setShowInfo, showInfo,isLoading, student, setItemEdit, se
     </table>
 </div>
 
-{isActive && <ModalConfirm position="center" setIsSuccess={setIsSuccess} setMessage={setMessage} setIsActive={setIsActive} queryKey="student" endpoint={`/v1/student/active/${id}`} isArchiving={isArchiving}/>}
+{store.isActive && <ModalConfirm position="center"   queryKey="student" endpoint={`/v1/student/active/${id}`} isArchiving={isArchiving}/>}
 
-{isDelete && <ModalDelete position="center" setIsSuccess={setIsSuccess} setMessage={setMessage} setIsDelete={setIsDelete} queryKey="student" endpoint={`/v1/student/${id}`}  />}
+{store.isDelete && <ModalDelete position="center"   queryKey="student" endpoint={`/v1/student/${id}`}  />}
 
 </>
   )

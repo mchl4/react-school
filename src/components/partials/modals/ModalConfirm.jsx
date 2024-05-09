@@ -4,10 +4,12 @@ import { LiaTimesSolid, LiaTrashAltSolid } from 'react-icons/lia'
 import { RiInboxArchiveLine } from 'react-icons/ri'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryData } from '../../helpers/queryData'
+import { StoreContext } from '../../../store/StoreContext'
+import { setIsActive, setMessage, setSuccess } from '../../../store/StoreAction'
 
 
-const ModalConfirm = ({position,setMessage, setIsActive,setIsSuccess,endpoint,queryKey, isArchiving}) => {
- 
+const ModalConfirm = ({position,endpoint,queryKey, isArchiving}) => {
+  const { dispatch } = React.useContext(StoreContext);
 const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -19,9 +21,9 @@ const queryClient = useQueryClient();
     
         queryClient.invalidateQueries({ queryKey: ["student"] });
         if (data.success) {
-        setIsActive(false)
-        setIsSuccess(true);
-        setMessage(`Record successfully ${isArchiving ? "Archived" : "Restored"}.`)
+        dispatch(setIsActive(false))
+        dispatch(setSuccess(true));
+        dispatch(setMessage(`Record successfully ${isArchiving ? "Restored" : "Archived" }.`))
       } else {
         setIsError(true)
         setMessage(data.error)

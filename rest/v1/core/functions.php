@@ -147,6 +147,14 @@ function checkKeyword($keyword)
     }
 }
 
+// Read search
+function checkSearch($object)
+{
+    $query = $object->search();
+    checkQuery($query, "Empty records. (search core)");
+    return $query;
+}
+
 // check limit id
 function checkLimitId($start, $total)
 {
